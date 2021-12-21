@@ -77,9 +77,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles(ApplicationUserRole.ADMIN.name())
                 .build();
 
+        //step 8
+        UserDetails tomUser = User.builder()
+                .username("linda")
+                .password(passwordEncoder.encode("123"))
+                .roles(ApplicationUserRole.ADMINTRAINEE.name())
+                .build();
+
         return new InMemoryUserDetailsManager(
                 annaSmithUser,
-                lindaUser
+                lindaUser,
+                tomUser
         );
     }
 }
