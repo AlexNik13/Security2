@@ -24,7 +24,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
 
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder)  {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -55,6 +55,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                */
                 .anyRequest()
                 .authenticated()
+
                 .and()
                 .formLogin()
                     .loginPage("/login")
@@ -62,11 +63,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/courses", true)
                     .passwordParameter("password")
                     .usernameParameter("username")
+
                 .and()
                 .rememberMe()
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
                     .key("somethingverysecured")
                     .rememberMeParameter("remember-me")
+
                 .and()
                 .logout()
                     .logoutUrl("/logout")
