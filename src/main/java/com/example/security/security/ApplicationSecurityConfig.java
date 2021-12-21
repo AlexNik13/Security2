@@ -32,9 +32,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "index.html", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
-                .antMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_READ.name())
-                .antMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_READ.name())
-                .antMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_READ.name())
+                .antMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_READ.getPermission())
+                .antMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_READ.getPermission())
+                .antMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_READ.getPermission())
                 .antMatchers(HttpMethod.GET, "/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(), ApplicationUserRole.ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated()
@@ -71,7 +71,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails annaSmithUser = User.builder()
                 .username("anna")
                 .password(passwordEncoder.encode("12345") ) // PasswordConfig занимаеться шифрование пароля.
-                .roles(ApplicationUserRole.STUDENT.name()  ) // назначаем роль
+               // .roles(ApplicationUserRole.STUDENT.name()  ) // назначаем роль
+                .authorities(ApplicationUserRole.STUDENT.getGrantedAuthority())
                 .build();
 
 
@@ -80,14 +81,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails lindaUser = User.builder()
                 .username("linda")
                 .password(passwordEncoder.encode("12345"))
-                .roles(ApplicationUserRole.ADMIN.name())
+              //  .roles(ApplicationUserRole.ADMIN.name())
+                .authorities(ApplicationUserRole.ADMIN.getGrantedAuthority())
                 .build();
 
         //step 8
         UserDetails tomUser = User.builder()
                 .username("tomUser")
                 .password(passwordEncoder.encode("12345"))
-                .roles(ApplicationUserRole.ADMINTRAINEE.name())
+              //  .roles(ApplicationUserRole.ADMINTRAINEE.name())
+                .authorities(ApplicationUserRole.ADMINTRAINEE.getGrantedAuthority())
                 .build();
 
         return new InMemoryUserDetailsManager(
