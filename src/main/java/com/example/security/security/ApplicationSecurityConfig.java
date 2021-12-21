@@ -49,14 +49,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @PreAuthorize("hasAnyRole('ADMIN', 'ADMINTRAINEE')")
                 .antMatchers(HttpMethod.GET, "/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(), ApplicationUserRole.ADMINTRAINEE.name())
-
-
-
                */
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .formLogin()
+                .loginPage("/login").permitAll()
+                ;
 
         /*.authorizeRequests()
 
