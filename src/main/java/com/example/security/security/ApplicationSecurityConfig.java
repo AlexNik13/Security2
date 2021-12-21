@@ -27,6 +27,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         // указаваем какие запросы обрабатывать через пароль
         // а какие не требуют логирования пользователя
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "index.html", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
@@ -79,8 +80,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //step 8
         UserDetails tomUser = User.builder()
-                .username("linda")
-                .password(passwordEncoder.encode("123"))
+                .username("tomUser")
+                .password(passwordEncoder.encode("12345"))
                 .roles(ApplicationUserRole.ADMINTRAINEE.name())
                 .build();
 
