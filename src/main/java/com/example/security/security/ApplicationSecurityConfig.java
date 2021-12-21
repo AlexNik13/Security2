@@ -24,14 +24,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // указаваем какие запросы обрабатывать через пароль
+        // а какие не требуют логирования пользователя
         http
                 .authorizeRequests()
-                .antMatchers("/", "index.html", "/css/*", "/js/*")
-                .permitAll()
+                .antMatchers("/", "index.html", "/css/*", "/js/*").permitAll()
+                .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin();
+                .httpBasic();
 
         /*.authorizeRequests()
 
@@ -55,17 +57,29 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    //step5
+    //step 5
     @Override
     @Bean
     public UserDetailsService userDetailsServiceBean() throws Exception {
 
         UserDetails annaSmithUser = User.builder()
                 .username("anna")
-                .password(passwordEncoder.encode("12345") )
-                .roles("STUDENTS")
+                .password(passwordEncoder.encode("12345") ) // PasswordConfig занимаеться шифрование пароля.
+                .roles(ApplicationUserRole.STUDENT.name()  ) // назначаем роль
                 .build();
 
-        return new InMemoryUserDetailsManager(annaSmithUser);
+
+
+        //step 7
+        UserDetails lindaUser = User.builder()
+                .username("linda")
+                .password(passwordEncoder.encode("12345"))
+                .roles(ApplicationUserRole.ADMIN.name())
+                .build();
+
+        return new InMemoryUserDetailsManager(
+                annaSmithUser,
+                lindaUser
+        );
     }
 }
