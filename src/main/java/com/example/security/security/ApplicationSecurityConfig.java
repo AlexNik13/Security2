@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +31,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         // указаваем какие запросы обрабатывать через пароль
         // а какие не требуют логирования пользователя
         http
+       //         .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+       //         .and()
+
+
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "index.html", "/css/*", "/js/*").permitAll()
